@@ -1,0 +1,27 @@
+{
+  "name": "cepdobom",
+  "version": "1.0.0",
+  "description": "API pública de busca de CEP",
+  "main": "index.js",
+  "scripts": {
+    "import": "node src",
+    "download": "mkdir -p data && curl https://ppd-cdn-tempotem.s3.amazonaws.com/ceps.txt-bckp > data/data.tab"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/renatoruis/cepdobom.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/renatoruis/cepdobom/issues"
+  },
+  "homepage": "https://github.com/renatoruis/cepdobom#readme",
+  "devDependencies": {
+    "standard": "^12.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "redis": "^2.8.0"
+  }
+}
