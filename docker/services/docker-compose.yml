@@ -9,9 +9,9 @@ services:
       - ../data/redis:/data
 
   api:
-    image: bla
+    image: renatoruis/cepninja
     restart: always
     links:
       - redis
     ports:
-      - 8080:3000
+      - 80:3000
