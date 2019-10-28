@@ -5,14 +5,124 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>CEP NINJA</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/pricing/pricing.css" rel="stylesheet">
 </head>
 <body>
-    <div align="center">
-            <img src="resources/cep-ninja-logo.png" alt="alt text" width="200" height="200 ">
-            <br>
-            <p>Em breve a API de cep mais rápida do universo! <br>tão rápida quanto um ninja.</p>
-            <br><br><br><br><br>
-            <p>Desenvolvida por <a href="https://github.com/willguitaradmfar" target="_new">Will</a> e <a href="https://github.com/renatoruis" target="_new">Renato</a></p>
+
+
+      <div class="text-center mb-4">
+        <img class="mb-4" src="resources/cep-ninja-logo.png" alt="" width="15%">
+        <p>API de CEP mais rápida do universo.</p>
+      </div>
+
+
+   <div class="container">
+      <div class="card-deck mb-6 text-center">
+
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">JSON</h4>
+          </div>
+          <div class="card-body">
+
+            <pre align=left>
+<b>GET</b> http://api.cep.ninja/ws/01310916/json
+
+<b>RESPONSE</b>
+{
+  "cep": "01310916",
+  "localidade": "São Paulo",
+  "uf": "SP",
+  "bairro": "Bela Vista",
+  "logradouro": "Avenida Paulista, 1374 ",
+  "referencia2": " Brazilian Finance Center"
+}
+            </pre>
+
+          </div>
+        </div>
+
+        <div class="card mb-6 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">XML</h4>
+          </div>
+          <div class="card-body">
+<pre align=left>
+ <b>GET</b> http://api.cep.ninja/ws/01310916/xml
+
+ <b>RESPONSE</b>     
+ </pre>      
+<textarea rows="10" cols="40" style="border: none">
+
+<xmlcep>
+<cep>01310916</cep>
+<localidade>São Paulo</localidade>
+<uf>SP</uf>
+<bairro>Bela Vista</bairro>
+<logradouro>Avenida Paulista, 1374 </logradouro>
+<referencia2> Brazilian Finance Center</referencia2>
+</xmlcep>
+
+</textarea>
+        
+
+
+
+
+
+
+
+
+          </div>
+        </div>
+
+      </div>
+
+      <footer class="pt-4 my-md-5 pt-md-5 border-top">
+        <div class="row">
+          <div class="col-12 col-md">
+            <img class="mb-2" src="https://cdn4.iconfinder.com/data/icons/logos-3/504/Open_Source_CMS-512.png" alt="" width="24" height="24">
+            <small class="d-block mb-3 text-muted">&copy; 2017-2018</small>
+          </div>
+          <div class="col-6 col-md">
+            <h5>Mantenedores</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="https://github.com/renatoruis/">Renato Ruis</a></li>
+              <li><a class="text-muted" href="https://github.com/willguitaradmfar">Will</a></li>
+              <li><a class="text-muted" href="#">Rafael</a></li>
+            </ul>
+          </div>
+          <!-- <div class="col-6 col-md">
+            <h5>Resources</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Resource</a></li>
+              <li><a class="text-muted" href="#">Resource name</a></li>
+              <li><a class="text-muted" href="#">Another resource</a></li>
+              <li><a class="text-muted" href="#">Final resource</a></li>
+            </ul>
+          </div> -->
+          <div class="col-6 col-md">
+            <h5>Colabore</h5>
+            <ul class="list-unstyled text-small">
+              <li><a class="text-muted" href="#">Doe</a></li>
+              <li><a class="text-muted" href="https://github.com/renatoruis/cep.ninja">Github</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
     </div>
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
