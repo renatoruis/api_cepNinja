@@ -4,8 +4,15 @@ const { promisify } = require('util')
 
 const { getClient, makeKey } = require('../../src/connection/redis')
 
+const midRemoteDash = (req, res, next) => {
+  if (req.params.cep && typeof req.params.cep === 'string') {
+    req.params.cep = req.params.cep.replace('-', '')
+  }
+  return next()
+}
+
 /* GET home page. */
-router.get('/ws/:cep/json', async (req, res, next) => {
+router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
   const client = await getClient()
 
   const get = promisify(client.get).bind(client)
