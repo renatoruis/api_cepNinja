@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const { promisify } = require('util')
+const jsontoxml = require('jsontoxml')
 
 const { getClient, makeKey } = require('../../src/connection/redis')
 
@@ -11,13 +12,16 @@ const midRemoteDash = (req, res, next) => {
   return next()
 }
 
-/* GET home page. */
-router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
+const getObject = async (cep) => {
   const client = await getClient()
 
   const get = promisify(client.get).bind(client)
 
-  const cepObject = JSON.parse(await get(makeKey(req.params.cep)))
+  return JSON.parse(await get(makeKey(cep)))
+}
+
+router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
+  const cepObject = await getObject(req.params.cep)
 
   if (!cepObject) {
     return res.status(404).json({
@@ -26,6 +30,22 @@ router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
   }
 
   return res.status(200).json(cepObject)
+})
+
+router.get('/ws/:cep/xml', midRemoteDash, async (req, res, next) => {
+  const cepObject = await getObject(req.params.cep)
+
+  res.setHeader('Content-Type', 'application/xml')
+
+  if (!cepObject) {
+    return res.status(404).end(jsontoxml({
+      xmlcep: {
+        error: `Cep ${req.params.cep} não encontrado !`
+      }
+    }))
+  }
+
+  return res.status(200).end(jsontoxml({ xmlcep: cepObject }))
 })
 
 module.exports = router
