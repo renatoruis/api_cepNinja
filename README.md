@@ -18,3 +18,5 @@ npm run download
 npm run import
 ```
 
+<img src="resources/architecture.svg" alt="alt text" width="800">
+
