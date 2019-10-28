@@ -1,5 +1,4 @@
 const redis = require('redis')
-const { promisify } = require('util')
 
 let connection
 
@@ -35,18 +34,9 @@ const getClient = () => {
   })
 }
 
-module.exports = async (list) => {
-  const client = await getClient()
+const makeKey = cep => `${process.env.REDIS_PREFIX}::${cep}`
 
-  const set = promisify(client.set).bind(client)
-
-  const total = list.length
-
-  for (const cepIndex in list) {
-    const cep = list[cepIndex]
-    await set(`${process.env.REDIS_PREFIX}::${cep.cep}`, JSON.stringify(cep))
-    if (cepIndex % 1000 === 0) {
-      console.log(`${cepIndex}/${total} ${(((100 * cepIndex) / total)).toFixed(2)}%`)
-    }
-  }
+module.exports = {
+  getClient,
+  makeKey
 }
