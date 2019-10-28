@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node bin/www",
     "import": "node import",
-    "download": "mkdir -p data && curl https://ppd-cdn-tempotem.s3.amazonaws.com/ceps.txt-bckp > data/data.tab"
+    "download": "mkdir -p data && curl https://cep-ninja.s3.amazonaws.com/ceps.txt > data/data.tab"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
