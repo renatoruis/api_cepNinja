@@ -1,0 +1,9 @@
+dist: trusty
+
+jobs:
+  include:
+    - stage: build and push docker image
+      script:
+      - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - docker build -t $DOCKER_USERNAME/api -f docker/back/Dockerfile .
+      - docker push $DOCKER_USERNAME/api
