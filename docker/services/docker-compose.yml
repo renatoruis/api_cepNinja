@@ -15,6 +15,6 @@ services:
       - "ES_JAVA_OPTS=-Xms256M -Xmx256M"
       - "discovery.type=single-node"
     volumes:
-      - ../data/:/usr/share/elasticsearch/data
+      - ../data/data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
