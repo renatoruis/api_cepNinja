@@ -47,7 +47,7 @@ const getObjectQuery = async (querystring, size = 10, page = 1) => {
   })
 
   return {
-    pages: Math.ceil(result.hits.total / size),
+    pages: Math.ceil(result.hits.total.value / size),
     data: result.hits.hits.map(hit => hit._source)
   }
 }
