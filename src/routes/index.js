@@ -28,7 +28,8 @@ const getObjectById = async (cep) => {
   return result.hits.hits.map(hit => hit._source)
 }
 
-const getObjectQuery = async (querystring, size = 10) => {
+const getObjectQuery = async (querystring, size = 10, page = 1) => {
+  page = page === '0' ? 1 : parseInt(page)
   if (!querystring) return []
   const query = {
     query_string: {
@@ -40,11 +41,15 @@ const getObjectQuery = async (querystring, size = 10) => {
     type: 'cep',
     body: {
       size: parseInt(size),
-      query
+      query,
+      from: (page - 1) * size
     }
   })
 
-  return result.hits.hits.map(hit => hit._source)
+  return {
+    pages: Math.ceil(result.hits.total / size),
+    data: result.hits.hits.map(hit => hit._source)
+  }
 }
 
 router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
@@ -76,7 +81,7 @@ router.get('/ws/:cep/xml', midRemoteDash, async (req, res, next) => {
 })
 
 router.get('/ws/xml', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObjectQuery(req.query.q, req.query.limit)
+  const cepObject = await getObjectQuery(req.query.q, req.query.limit, req.query.page)
 
   res.setHeader('Content-Type', 'application/xml')
 
@@ -92,7 +97,7 @@ router.get('/ws/xml', midRemoteDash, async (req, res, next) => {
 })
 
 router.get('/ws/json', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObjectQuery(req.query.q, req.query.limit)
+  const cepObject = await getObjectQuery(req.query.q, req.query.limit, req.query.page)
 
   if (!cepObject) {
     return res.status(404).json({
