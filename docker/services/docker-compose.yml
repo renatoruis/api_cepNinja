@@ -1,7 +1,7 @@
 version: "3"
 services:
   api:
-    image: renatoruis/cepninja
+    image: cepninja/api:latest
     restart: always
     links:
       - elasticsearch
