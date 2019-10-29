@@ -28,7 +28,7 @@ const getObjectById = async (cep) => {
   return result.hits.hits.map(hit => hit._source)
 }
 
-const getObjectQuery = async (querystring) => {
+const getObjectQuery = async (querystring, size = 10) => {
   if (!querystring) return []
   const query = {
     query_string: {
@@ -39,6 +39,7 @@ const getObjectQuery = async (querystring) => {
     index: makeIndex(),
     type: 'cep',
     body: {
+      size: parseInt(size),
       query
     }
   })
@@ -75,7 +76,7 @@ router.get('/ws/:cep/xml', midRemoteDash, async (req, res, next) => {
 })
 
 router.get('/ws/xml', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObjectQuery(req.query.q)
+  const cepObject = await getObjectQuery(req.query.q, req.query.limit)
 
   res.setHeader('Content-Type', 'application/xml')
 
@@ -91,7 +92,7 @@ router.get('/ws/xml', midRemoteDash, async (req, res, next) => {
 })
 
 router.get('/ws/json', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObjectQuery(req.query.q)
+  const cepObject = await getObjectQuery(req.query.q, req.query.limit)
 
   if (!cepObject) {
     return res.status(404).json({
