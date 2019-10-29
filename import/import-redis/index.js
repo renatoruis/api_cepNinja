@@ -1,6 +1,8 @@
 const { getClient, makeKey } = require('../../src/connection/redis')
 const { promisify } = require('util')
-
+/**
+ * Deprecated
+ */
 module.exports = async (list) => {
   const client = await getClient()
 

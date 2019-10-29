@@ -1,9 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { promisify } = require('util')
 const jsontoxml = require('jsontoxml')
 
-const { getClient, makeKey } = require('../../src/connection/redis')
+const { search, makeIndex } = require('../../src/connection/elasticsearch')
 
 const midRemoteDash = (req, res, next) => {
   if (req.params.cep && typeof req.params.cep === 'string') {
@@ -12,16 +11,43 @@ const midRemoteDash = (req, res, next) => {
   return next()
 }
 
-const getObject = async (cep) => {
-  const client = await getClient()
+const getObjectById = async (cep) => {
+  const query = {
+    match: {
+      _id: cep
+    }
+  }
+  const result = await search({
+    index: makeIndex(),
+    type: 'cep',
+    body: {
+      query
+    }
+  })
 
-  const get = promisify(client.get).bind(client)
+  return result.hits.hits.map(hit => hit._source)
+}
 
-  return JSON.parse(await get(makeKey(cep)))
+const getObjectQuery = async (querystring) => {
+  if (!querystring) return []
+  const query = {
+    query_string: {
+      query: querystring
+    }
+  }
+  const result = await search({
+    index: makeIndex(),
+    type: 'cep',
+    body: {
+      query
+    }
+  })
+
+  return result.hits.hits.map(hit => hit._source)
 }
 
 router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObject(req.params.cep)
+  const [cepObject] = await getObjectById(req.params.cep)
 
   if (!cepObject) {
     return res.status(404).json({
@@ -33,7 +59,7 @@ router.get('/ws/:cep/json', midRemoteDash, async (req, res, next) => {
 })
 
 router.get('/ws/:cep/xml', midRemoteDash, async (req, res, next) => {
-  const cepObject = await getObject(req.params.cep)
+  const [cepObject] = await getObjectById(req.params.cep)
 
   res.setHeader('Content-Type', 'application/xml')
 
@@ -46,6 +72,34 @@ router.get('/ws/:cep/xml', midRemoteDash, async (req, res, next) => {
   }
 
   return res.status(200).end(jsontoxml({ xmlcep: cepObject }))
+})
+
+router.get('/ws/xml', midRemoteDash, async (req, res, next) => {
+  const cepObject = await getObjectQuery(req.query.q)
+
+  res.setHeader('Content-Type', 'application/xml')
+
+  if (!cepObject) {
+    return res.status(404).end(jsontoxml({
+      xmlcep: {
+        error: `Cep ${req.params.cep} não encontrado !`
+      }
+    }))
+  }
+
+  return res.status(200).end(jsontoxml({ xmlcep: cepObject }))
+})
+
+router.get('/ws/json', midRemoteDash, async (req, res, next) => {
+  const cepObject = await getObjectQuery(req.query.q)
+
+  if (!cepObject) {
+    return res.status(404).json({
+      error: `Cep ${req.params.cep} não encontrado !`
+    })
+  }
+
+  return res.status(200).json(cepObject)
 })
 
 module.exports = router

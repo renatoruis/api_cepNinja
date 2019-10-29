@@ -1,9 +1,14 @@
 require('dotenv').config()
 const load = require('./load-database')
-const redisImporter = require('./import-redis')
+/**
+ * Deprecated
+ */
+// const redisImporter = require('./import-redis')
+
+const elasticsearchImporter = require('./import-elasticsearch')
 
 load()
-  .then(redisImporter)
+  .then(elasticsearchImporter)
   .then(() => {
     console.log('Done!')
   })

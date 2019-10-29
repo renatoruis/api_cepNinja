@@ -2,6 +2,10 @@ const redis = require('redis')
 
 let connection
 
+/**
+ * Deprecated
+ */
+
 const getCredencialsRedis = () => {
   if (process.env.REDIS_PASS) {
     return {
